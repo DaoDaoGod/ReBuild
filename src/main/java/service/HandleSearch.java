@@ -32,13 +32,18 @@ public class HandleSearch {
 						+ searchText + "%'";
 				FilmDao filmDao = new FilmDao();
 				List<Film> films = new ArrayList<Film>();
-				films = filmDao.getFilmByCondition(sql);
+				Film newfilm=new Film();
+				//films = filmDao.getFilmByCondition(sql);
+				films=filmDao.getResultList(sql,Film.class);
+				if(films!=null)
+				{
 				List<String> strs=new ArrayList<String>();
 				for (int i = 0; i < films.size(); i++) {
 					strs.add(films.get(i).getName());
 					System.out.println(films.get(i).getName());
 				}
 				  request.setAttribute("my-data1",strs);
+				}
 			} else {
 	
 			      request.setAttribute("my-data2","search is empty");

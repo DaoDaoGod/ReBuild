@@ -1,118 +1,58 @@
 package dao;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import service.Pmap;
 import model.User;
 
-public class UserDao {
-	private String sql;
-	private Connection conn;
-
-	public String getSql() {
-		return sql;
-	}
-
-	public void setSql(String sql) {
-		this.sql = sql;
-	}
-
-	public Connection getConn() {
-		return conn;
-	}
-
-	public void setConn(Connection conn) {
-		this.conn = conn;
-	}
-
+public class UserDao extends ShareDao {
+	
 	public UserDao() {
 		initConnection();
-	}
-
-	public void initConnection() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/myfilm", "root", "1234");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public boolean save(String email, String password) {
 
 		try {
 			String sql = "select * from user where email=" + email;
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			if (rs.next()) {
-				System.out.println("Exist such email");
-				stmt.close();
-				rs.close();
-				closeConnection();
-				return false;
-			} else {
+			if(getResultList(sql,User.class).size()==0)
+			{
 				System.out.println("Not exist such email");
 				String insql = "insert into user(email,password) values("
 						+ email + "," + password + ")";
+				Statement stmt = this.getConn().createStatement();
 				int num = stmt.executeUpdate(insql);
-				if (num > 0) {
-					stmt.close();
-					rs.close();
-					closeConnection();
-					return true;
-				} else {
-					stmt.close();
-					rs.close();
-					closeConnection();
-
-					return false;
-				}
+				return true;
+			}
+			else {
+				return false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
-
+   
 	public User getUserByEmail(String email) {
-		try {
+		
 			String sql = "select * from user where email=" + email;
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			if (rs.next()) {
-				User user = new User();
-				user.setUserId(Integer.parseInt(rs.getString("user_id")));
-				user.setEmail(rs.getString("email"));
-				user.setPassword(rs.getString("password"));
-				stmt.close();
-				rs.close();
-				closeConnection();
-				return user;
-			} else {
-				stmt.close();
-				rs.close();
-				closeConnection();
-				return null;
+		    List<User> list=getResultList(sql,User.class);
+		    if(list==null||list.size()==0)
+		    	return null;
+		    else {
+				return list.get(0);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-		return null;
+		
 	}
 
-	public void closeConnection() {
-		if (conn != null) {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+
 }

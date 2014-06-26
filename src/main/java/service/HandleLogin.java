@@ -21,7 +21,8 @@ public class HandleLogin {
 				name = "\"" + name + "\"";
 				UserDao userdao = new UserDao();
 				User newuser = userdao.getUserByEmail(name);
-				if (newuser.getPassword().compareTo(password) == 0) {
+				System.out.println(newuser.getPassword());
+				if (newuser!=null&&newuser.getPassword().equals(password)) {
 					request.setAttribute("my-data2","Successful");
 				} else {
 					request.setAttribute("my-data2","Failed");
