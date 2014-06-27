@@ -9,11 +9,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%
+<%-- <%
  List<String> li=( List<String>)request.getAttribute("my-data1");
  out.print(li.size());
  for(int i=0;i<li.size();i++)
 out.print(li.get(i)+"</br>"); 
- %> 
+ %>  --%>
 </body>
 </html>

@@ -8,17 +8,20 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import model.User;
 import dao.UserDao;
 
 public class HandleLogin {
+	private static Logger logger = Logger.getLogger(HandleLogin.class);
 	public String login(@Pname(name = "loginname") String name,
 			@Pname(name = "loginpassword") String password,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			if (name.compareTo("") != 0 && password.compareTo("") != 0) {
 				UserDao userdao = new UserDao();
 				User newuser = userdao.getUserByEmail(name);
-				//System.out.println(newuser.getPassword());
+				//logger.debug(newuser.getPassword());
 				if (newuser!=null&&newuser.getPassword().equals(password)) {
 					request.setAttribute("my-data2","Successful");
 				} else {

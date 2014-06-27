@@ -15,10 +15,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
+import Proxy.MyInvokationHandler;
+
 /**
  * Servlet implementation class Handle
  */
 public class Handle extends HttpServlet {
+	private static Logger logger = Logger.getLogger(Handle.class);
 	private static final long serialVersionUID = 1L;
 	@Override
 	protected void service(HttpServletRequest request,
@@ -41,7 +46,7 @@ public class Handle extends HttpServlet {
 		    methods=action.getClass().getMethods();
 		    for(int i=0;i<methods.length;i++)
 		    {
-		    	System.out.println(methods[i].getName());
+		    	logger.debug(methods[i].getName());
 		    	if(methods[i].getName().compareTo(methodname)==0)
 		    	{
 		    		m=methods[i];	

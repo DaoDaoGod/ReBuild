@@ -15,6 +15,8 @@ import service.Pmap;
 import model.User;
 
 public class UserDao extends ShareDao {
+	
+	
 	public boolean save(String email, String password) {
 
 		try {
@@ -24,7 +26,6 @@ public class UserDao extends ShareDao {
 			if(getResultList(sql,User.class,objects,new int[]{Types.VARCHAR}).size()==0)
 			{
 				
-				System.out.println("Not exist such email");
 				String insql = "insert into user(email,password) values(?,?)";
 				objects[0]=email;
 				objects[1]=password;
@@ -51,7 +52,6 @@ public class UserDao extends ShareDao {
 			Object[] objects=new Object[1];
 			objects[0]=email;
 		    List<User> list=getResultList(sql,User.class,objects,new int[]{Types.VARCHAR});
-		    System.out.println(list.size());
 		    if(list==null||list.size()==0)
 		    	return null;
 		    else {

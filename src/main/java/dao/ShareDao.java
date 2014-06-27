@@ -7,15 +7,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Film;
+import org.apache.log4j.Logger;
+
 import service.Pmap;
 
-public class ShareDao {
+public class ShareDao implements DaoInf {
+	private static Logger logger = Logger.getLogger(ShareDao.class);  
+	
 	private String sql;
 	private Connection conn;
 
@@ -62,13 +64,13 @@ public class ShareDao {
 		
 	    try {
 	    	PreparedStatement ps=conn.prepareStatement(sql);
-	    	System.out.println(sql);
+	    	logger.debug(sql);
 	    	for(int i=0;i<types.length;i++)
 	    	{
 	    		if(types[i]==Types.VARCHAR)
 	    		{
 	    			ps.setString(i+1, (String)parms[i]);
-	    			System.out.println((String)parms[i]);
+	    			logger.debug((String)parms[i]);
 	    		}
 	    		else if(types[i]==Types.INTEGER)
 	    		{
@@ -121,7 +123,7 @@ public class ShareDao {
 				   
 			   }
 	
-			System.out.println("size = "+list.size());
+			logger.debug("size = "+list.size());
 			ps.close();
 	    	rs.close();
 			return list;

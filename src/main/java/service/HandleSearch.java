@@ -36,7 +36,6 @@ public class HandleSearch {
 				List<String> strs=new ArrayList<String>();
 				for (int i = 0; i < films.size(); i++) {
 					strs.add(films.get(i).getName());
-					System.out.println(films.get(i).getName());
 				}
 				  request.setAttribute("my-data1",strs);
 				}
