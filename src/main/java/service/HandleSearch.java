@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.PublicKey;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,14 +22,25 @@ import dao.FilmDao;
 import model.Film;
 
 public class HandleSearch {
-
 	
+	public  @Pdao(Dao="dao.FilmDao",Method="setFilmDao")  FilmDao  filmDao;
+	
+	
+	public FilmDao getFilmDao() {
+		return filmDao;
+	}
+
+
+	public void setFilmDao(FilmDao filmDao) {
+		this.filmDao = filmDao;
+	}
+
+
 	public String search(@Pname(name="searchText")String searchText,HttpServletRequest request,HttpServletResponse response)
 	{
 		
 		try {
 			if (searchText.compareTo("") != 0) {
-				FilmDao filmDao = new FilmDao();
 				List<Film> films = new ArrayList<Film>();
 				films=filmDao.getFilmByCon(searchText);
 				if(films!=null)
@@ -48,5 +60,6 @@ public class HandleSearch {
 		}
 		return "/my.jsp";
 	}
+
 
 }
