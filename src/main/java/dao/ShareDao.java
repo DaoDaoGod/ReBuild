@@ -4,12 +4,15 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Film;
 import service.Pmap;
 
 public class ShareDao {
@@ -45,14 +48,46 @@ public class ShareDao {
 			e.printStackTrace();
 		}
 	}
-    public <T> List<T> getResultList(String sql, Class<T> type){
+
+	private Connection getConnection() {
+		try {
+			return DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/myfilm", "root", "1234");
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+    public <T> List<T> getResultList(String sql, Class<T> type,Object parms[],int types[]){
 		
 	    try {
+	    	PreparedStatement ps=conn.prepareStatement(sql);
+	    	System.out.println(sql);
+	    	for(int i=0;i<types.length;i++)
+	    	{
+	    		if(types[i]==Types.VARCHAR)
+	    		{
+	    			ps.setString(i+1, (String)parms[i]);
+	    			System.out.println((String)parms[i]);
+	    		}
+	    		else if(types[i]==Types.INTEGER)
+	    		{
+					ps.setInt(i+1,(Integer)parms[i]);
+				}
+	    		else if(types[i]==Types.DOUBLE)
+	    		{
+	    			 ps.setDouble(i+1,(Double)parms[i]);
+	    			 
+	    		}
+	    		else {
+					 ps.setNull(i+1,Types.NULL);
+				}
+	    	}
+	    	
+	    	
 	    	List<T> list=new ArrayList<T>();
-	    	Statement stmt=conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql) ;
-			if(!rs.wasNull())
-		    {
+	    	//Statement stmt=conn.createStatement();
+			ResultSet rs = ps.executeQuery() ;
 			   while(rs.next())
 			   {
 				   T tempobj= (T)type.newInstance();
@@ -85,17 +120,50 @@ public class ShareDao {
 				   list.add(tempobj);
 				   
 			   }
-		    }
+	
 			System.out.println("size = "+list.size());
-			stmt.close();
+			ps.close();
 	    	rs.close();
 			return list;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    return null;
 	}
+    public int Save(String sql,Object []parms,int []types)
+    {
+    	
+    	try {
+    		PreparedStatement ps=conn.prepareStatement(sql);
+	    	for(int i=0;i<parms.length;i++)
+	    	{
+	    		if(types[i]==Types.VARCHAR)
+	    		{
+	    			ps.setString(i+1, (String)parms[i]);
+	    		}
+	    		else if(types[i]==Types.INTEGER)
+	    		{
+					ps.setInt(i+1,(Integer)parms[i]);
+				}
+	    		else if(types[i]==Types.DOUBLE)
+	    		{
+	    			 ps.setDouble(i+1,(Double)parms[i]);
+	    			 
+	    		}
+	    		else {
+					 ps.setNull(i+1,Types.NULL);
+				}
+	    	}
+    		int num = ps.executeUpdate();
+    	    ps.close();
+    		if(num>0)return 0;
+    		else return -1;
+		  } catch (Exception e) {
+			return 0;
+		}
+    	
+    }
+    
 	public void closeConnection() {
 		if (conn != null) {
 			try {
@@ -106,4 +174,6 @@ public class ShareDao {
 			}
 		}
 	}
+	
+	
 }

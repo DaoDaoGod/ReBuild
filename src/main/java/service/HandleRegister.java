@@ -17,8 +17,6 @@ public class HandleRegister{
 	try {
 		
 		if (name.compareTo("") != 0 && password.compareTo("") != 0) {
-			name = "\"" + name + "\"";
-			password = "\"" + password + "\"";
 
 			UserDao userdao = new UserDao();
 			Boolean state = userdao.save(name, password);

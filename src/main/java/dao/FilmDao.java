@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +18,13 @@ import model.Film;
 
 public class FilmDao extends ShareDao {
 	
-    public List<Film> getFilmByCon(String sql)
+    public List<Film> getFilmByCon(String searchText)
     {
-    	return getResultList(sql,Film.class);
+    	String sql = "SELECT * FROM film f WHERE f.name LIKE ?";
+    	Object[] objects=new Object[1];
+    	objects[0]="%" + searchText + "%";
+    	return getResultList(sql,Film.class,objects,new int[]{Types.VARCHAR});
     }
+    
     
  }

@@ -28,13 +28,9 @@ public class HandleSearch {
 		
 		try {
 			if (searchText.compareTo("") != 0) {
-				String sql = "select * from film where name like '%"
-						+ searchText + "%'";
 				FilmDao filmDao = new FilmDao();
 				List<Film> films = new ArrayList<Film>();
-				Film newfilm=new Film();
-				//films = filmDao.getFilmByCondition(sql);
-				films=filmDao.getResultList(sql,Film.class);
+				films=filmDao.getFilmByCon(searchText);
 				if(films!=null)
 				{
 				List<String> strs=new ArrayList<String>();
