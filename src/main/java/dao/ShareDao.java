@@ -49,17 +49,7 @@ public class ShareDao implements DaoInf {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private Connection getConnection() {
-		try {
-			return DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/myfilm", "root", "1234");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
+	}	
     public <T> List<T> getResultList(String sql, Class<T> type,Object parms[],int types[]){
 		
 	    try {
@@ -165,6 +155,10 @@ public class ShareDao implements DaoInf {
 		}
     	
     }
+   /* public <T> List<T> getListByName(String name,Class<E> value)
+    {
+    	
+    }*/
     
 	public void closeConnection() {
 		if (conn != null) {

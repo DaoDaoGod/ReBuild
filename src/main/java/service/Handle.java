@@ -8,6 +8,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,13 @@ public class Handle extends HttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+	  Enumeration enums=request.getHeaderNames();
+	  while(enums.hasMoreElements())
+	  {
+		  logger.debug(enums.nextElement());
+		  logger.debug(request.getHeader(enums.nextElement().toString()));
+	  }
+		
 		String path = request.getRequestURI().substring(
 				request.getContextPath().length());
 		logger.debug(path);

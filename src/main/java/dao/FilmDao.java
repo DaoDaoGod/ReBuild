@@ -13,17 +13,23 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import Proxy.MyProxyFactory;
 import service.Pmap;
 import model.Film;
 
-public class FilmDao extends ShareDao {
-	
+public class FilmDao{
+	private DaoInf dInf;
+	public FilmDao()
+	{
+		DaoInf target=new ShareDao();
+		dInf=(DaoInf)MyProxyFactory.getProxy(target);
+	}
     public List<Film> getFilmByCon(String searchText)
     {
     	String sql = "SELECT * FROM film f WHERE f.name LIKE ?";
     	Object[] objects=new Object[1];
     	objects[0]="%" + searchText + "%";
-    	return getResultList(sql,Film.class,objects,new int[]{Types.VARCHAR});
+    	return dInf.getResultList(sql,Film.class,objects,new int[]{Types.VARCHAR});
     }
     
     

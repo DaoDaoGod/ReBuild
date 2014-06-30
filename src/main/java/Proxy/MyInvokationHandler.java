@@ -20,13 +20,15 @@ public class MyInvokationHandler implements InvocationHandler {
 
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
+		
+		logger.debug("Invoke "+method.getName()+"\n");
 		Type[] paramTypeList = method.getGenericParameterTypes();
 		for (Type parmType : paramTypeList) {
 			logger.debug(" " + parmType);
 			if (parmType instanceof ParameterizedType) {
 				Type[] types = ((ParameterizedType) parmType)
 						.getActualTypeArguments();
-				logger.debug("TypeArguments:");
+				logger.debug("TypeArguments: ");
 
 				for (Type type : types) {
 					logger.debug(" " + type);
@@ -45,7 +47,8 @@ public class MyInvokationHandler implements InvocationHandler {
 				logger.debug(" " + type);
 			}
 		}
-
+		method.invoke(target,args);
+		logger.debug("Invoke Finsh");
 		return null;
 	}
 
